@@ -11,7 +11,7 @@ class Mux:
         self.pin_s2 = Pin(pin_s2, Pin.OUT)
         self.pin_s3 = Pin(pin_s3, Pin.OUT)
         self.pin_e = Pin(pin_e, Pin.OUT)
-        self.pin_e.value(1)
+        self.pin_e.value(0)
 
     # Set the channel
     def set_channel(self, channel):
