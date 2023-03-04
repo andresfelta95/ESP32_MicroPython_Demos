@@ -9,11 +9,6 @@
 #              - Sensor 3: Channel 2
 #              - Sensor 4: Channel 3
 #              - Sensor 5: Channel 4
-#              - Sensor 6: Channel 5
-#              - Sensor 7: Channel 6
-#              - Sensor 8: Channel 7
-#              - Sensor 9: Channel 8
-#              - Sensor 10: Channel 9
 #              The ESP32 is connected to the Multiplexer as follows:
 #              - S0: Pin 4
 #              - S1: Pin 5
@@ -31,18 +26,13 @@
 #              - Sensor 3: Pin 25
 #              - Sensor 4: Pin 26
 #              - Sensor 5: Pin 27
-#              - Sensor 6: Pin 14
-#              - Sensor 7: Pin 12
-#              - Sensor 8: Pin 13
-#              - Sensor 9: Pin 15
-#              - Sensor 10: Pin 2
 #              The trigger pin for the multiplexer is connected to the ESP32 as follows:
-#              - Pin 4
+#              - Pin 15
 
 # Import the libraries
 from ssd1306 import SSD1306_I2C
-from machine import I2C, Pin
-from time import sleep
+from machine import I2C, Pin, time_pulse_us
+from time 
 import mux
 
 # Create the Multiplexer object
@@ -53,6 +43,9 @@ i2c = I2C(scl=Pin(22), sda=Pin(21))
 
 # Create the OLED object
 oled = SSD1306_I2C(128, 32, i2c)
+
+# Create the trigger pin for the multiplexer
+_Signal = Pin(15, Pin.OUT)
 
 # Create the pins for the sensors
 sensor1 = Pin(32, Pin.IN)
@@ -68,4 +61,19 @@ sensor10 = Pin(2, Pin.IN)
 
 # Create the list of sensors
 sensors = [sensor1, sensor2, sensor3, sensor4, sensor5, sensor6, sensor7, sensor8, sensor9, sensor10]
+
+# While loop to detect darts
+while True:
+    for i in range(10):
+        mux.set_channel(i)
+        _Signal.value(0)
+        time.sleep_us(5)
+        _Signal.value(1)
+        time.sleep_us(TRIG_PULSE_DURATION_US)
+        _Signal.value(0)
+
+        ultraSonic_Duration = time_pulse_us(_Sensor1, 1, 30000)
+        distance = ultraSonic_Duration * sounn_Speed / 2 / 10000
+
+    print("Distance Sensor #1: ", distance, "cm")
 
