@@ -57,11 +57,11 @@ mux = Mux(18, 5, 17, 16, 19)
 #Setting the trigger 
 trig = Pin(4, Pin.OUT) #was pin 15 
 
-Sound_SPEED = 340
+Sound_SPEED = 34300 #cm/s
 TRIG_PULSE_DURATION_US = 10
 
-# Create the pins for the sensors
-sensor1 = Pin(13, Pin.IN)
+# Create  the pins for the sensors
+sensor1 = Pin(13, Pin.IN) 
 sensor2 = Pin(12, Pin.IN)
 sensor3 = Pin(14, Pin.IN)
 sensor4 = Pin(27, Pin.IN)
@@ -94,7 +94,9 @@ def read_distance(echo):
         trig.value(0)
         ultrason_duration = time_pulse_us(echo, 1, 30000)
         if i > 0:
-            distance_cm += Sound_SPEED * ultrason_duration /20000
+            #   cm = duration * speed of sound(cm/s) / 2 (round trip) / 10000 (us to s)
+            distance_cm += Sound_SPEED * ultrason_duration /2 / 1000000
+        time.sleep_us(100)
     distance_cm = distance_cm / 9
     #rounding the distance to no decimal places
     distance_cm = math.floor(distance_cm)
@@ -104,11 +106,11 @@ def read_distance(echo):
 
 while True:
     #   Read the distance from each sensor
-    for i in range(10):
-        mux.set_channel(i)
-        distance = read_distance(sensors[i])
-        print("Sensor: ", i + 1, " Distance: ", distance)
-        time.sleep(1)
+    for sensor in sensors:
+        mux.set_channel(sensors.index(sensor))
+        distance = read_distance(sensor)
+        print("Sensor: ", sensors.index(sensor), " Distance: ", distance)
+        time.sleep(0.5)
 
 def findingTheDart(dartList):
     position = 0
