@@ -92,14 +92,14 @@ def read_distance(echo):
         trig.value(1)
         time.sleep_us(TRIG_PULSE_DURATION_US)
         trig.value(0)
-        ultrason_duration = time_pulse_us(echo, 1, 30000)
+        ultrason_duration = time_pulse_us(echo, 1, 50000)
         if i > 0:
             #   cm = duration * speed of sound(cm/s) / 2 (round trip) / 10000 (us to s)
             distance_cm += Sound_SPEED * ultrason_duration /2 / 1000000
         time.sleep_us(100)
     distance_cm = distance_cm / 9
-    #rounding the distance to no decimal places
-    distance_cm = math.floor(distance_cm)
+    #rounding the distance to no decimal places and adding 1 to get the middle of the dart(exact distance)
+    distance_cm = distance_cm + 1.2
     return distance_cm   
 
     
