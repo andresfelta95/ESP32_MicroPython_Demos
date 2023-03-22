@@ -14,42 +14,49 @@ Date: 2023-03-17
 # Import the libraries
 from machine import Pin, time_pulse_us
 import time
+import uasyncio as asyncio
 import math
+
+Sound_SPEED = 34300 #cm/s
 
 # Create the class
 class UltraSensor:
 
     #   Initialize the sensor
-    def __init__(self, echo, location):
+    def __init__(self, echo, _x, _y):
         #   Set the attributes
         self._echo = Pin(echo, Pin.IN)
         self._trig = Pin(4, Pin.OUT)
         self._trig.value(0)
-        self._location = location
-        self._distance = 0.0
-        self._timeOut = 600 #   Timeout in us for the echo pulse
+        #   Set the location of the sensor as a tuple
+        self._location = (_x, _y)
+        self.distance = 0.0
+        self._timeOut = 50000 #   Timeout in us for the echo pulse
         self._sleep = 0.1 #   Sleep time in s between readings
         self._iterations = 30 #   Number of iterations to get the average distance
         self._perFail = 0.66 #   Percentage of failed readings to consider the sensor as failed
 
 
-    #   Pulse function to get the echo pulse
-    def _pulse(self) -> int:
-        #   Send the trig pulse
-        tr = self._trig
-        tr.value(0)
-        time.sleep_us(5)
-        tr.value(1)
-        time.sleep_us(10)
-        tr.value(0)
-        #  Try to get the echo pulse
-        try:
-            return time_pulse_us(self._echo, 1, self._timeOut)
-        except OSError as err:
-            #   if the e.args[0] == 100 then the echo pulse Timed out
-            if e.args[0] == 100:
-                raise OSError("Echo pulse timed out")
-            raise err
-        
+    #   This function will read the distance from the sensor and return the distance in cm
+    def read_distance(self):
+        distances = []
+        for i in range(self._iterations):
+            self._trig.value(1)
+            time.sleep_us(10)
+            self._trig.value(0)
+            try:
+                ultrason_duration = time_pulse_us(self._echo, 1, self._timeOut)
+            except OSError:
+                ultrason_duration = 0
+            if ultrason_duration > 0:
+                #   cm = duration * speed of sound(cm/s) / 2 (round trip) / 10000 (us to s)
+                distances.append(Sound_SPEED * ultrason_duration /2 / 1000000)
+            time.sleep_ms(self._sleep)
+        #   Remove the outliers
+        distances.sort()
+        distances = distances[math.floor(self._perFail * self._iterations):math.ceil((1 - self._perFail) * self._iterations)]
+        #   Return the average distance
+        return sum(distances) / len(distances)
+    
     
         

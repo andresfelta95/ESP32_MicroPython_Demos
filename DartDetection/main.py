@@ -43,6 +43,7 @@
 from machine import Pin, time_pulse_us
 import time
 from mux import Mux
+from ultraSensor import UltraSensor
 import math
 
 # Create the Multiplexer object
@@ -60,20 +61,20 @@ trig = Pin(4, Pin.OUT) #was pin 15
 Sound_SPEED = 34300 #cm/s
 TRIG_PULSE_DURATION_US = 10
 
-# Create  the pins for the sensors
-sensor1 = Pin(13, Pin.IN) 
-sensor2 = Pin(12, Pin.IN)
-sensor3 = Pin(14, Pin.IN)
-sensor4 = Pin(27, Pin.IN)
-sensor5 = Pin(26, Pin.IN)
-sensor6 = Pin(25, Pin.IN)
-sensor7 = Pin(33, Pin.IN)
-sensor8 = Pin(32, Pin.IN)
-sensor9 = Pin(35, Pin.IN)
-sensor10 = Pin(34, Pin.IN)
+# Create the sensors objects
+sensor0 = UltraSensor(13, 0, 19.8) # Pin 13 , location (0,20)
+sensor1 = UltraSensor(12, 11.4, 16.2) # Pin 12 , location (11.4,16.2)
+sensor2 = UltraSensor(14, 18.8, 6) # Pin 14 , location (18.8,6)
+sensor3 = UltraSensor(27, 18.8, -6) # Pin 27 , location (18.8,-6)
+sensor4 = UltraSensor(26, 11.4, -16.2) # Pin 26 , location (11.4,-16.2)
+sensor5 = UltraSensor(25, 0, -19.8) # Pin 25 , location (0,-19.8)
+sensor6 = UltraSensor(33, -11.4, -16.2) # Pin 33 , location (-11.4,-16.2)
+sensor7 = UltraSensor(32, -18.8, -6) # Pin 32 , location (-18.8,-6)
+sensor8 = UltraSensor(35, -18.8, 6) # Pin 35 , location (-18.8,6)
+sensor9 = UltraSensor(34, -11.4, 16.2) # Pin 34 , location (-11.4,16.2)
 
 # Create the list of sensors
-sensors = [sensor1, sensor2, sensor3, sensor4, sensor5, sensor6, sensor7, sensor8, sensor9, sensor10]
+sensors = [sensor0, sensor1, sensor2, sensor3, sensor4, sensor5, sensor6, sensor7, sensor8, sensor9]
 
 #points (sending the data one at a time)
 player1_points = 0
@@ -84,23 +85,23 @@ player2_points = 0
     Parameters: echo - the echo pin of the sensor
     Returns: distance in cm
 """
-def read_distance(echo):
-    distance_cm = 0
-    for i in range(10):
-        trig.value(0)
-        time.sleep_us(5)
-        trig.value(1)
-        time.sleep_us(TRIG_PULSE_DURATION_US)
-        trig.value(0)
-        ultrason_duration = time_pulse_us(echo, 1, 50000)
-        if i > 0:
-            #   cm = duration * speed of sound(cm/s) / 2 (round trip) / 10000 (us to s)
-            distance_cm += Sound_SPEED * ultrason_duration /2 / 1000000
-        time.sleep_us(100)
-    distance_cm = distance_cm / 9
-    #rounding the distance to no decimal places and adding 1 to get the middle of the dart(exact distance)
-    distance_cm = distance_cm + 1.2
-    return distance_cm   
+# def read_distance(echo):
+#     distance_cm = 0
+#     for i in range(10):
+#         trig.value(0)
+#         time.sleep_us(5)
+#         trig.value(1)
+#         time.sleep_us(TRIG_PULSE_DURATION_US)
+#         trig.value(0)
+#         ultrason_duration = time_pulse_us(echo, 1, 50000)
+#         if i > 0:
+#             #   cm = duration * speed of sound(cm/s) / 2 (round trip) / 10000 (us to s)
+#             distance_cm += Sound_SPEED * ultrason_duration /2 / 1000000
+#         time.sleep_us(100)
+#     distance_cm = distance_cm / 9
+#     #rounding the distance to no decimal places and adding 1 to get the middle of the dart(exact distance)
+#     distance_cm = distance_cm + 1.2
+#     return distance_cm   
 
     
 
@@ -108,9 +109,9 @@ while True:
     #   Read the distance from each sensor
     for sensor in sensors:
         mux.set_channel(sensors.index(sensor))
-        distance = read_distance(sensor)
+        distance = sensor.get_distance()
         print("Sensor: ", sensors.index(sensor), " Distance: ", distance)
-        time.sleep(0.5)
+        time.sleep(1)
 
 def findingTheDart(dartList):
     position = 0
