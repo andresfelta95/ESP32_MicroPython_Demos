@@ -41,6 +41,8 @@ class UltraSensor:
     def read_distance(self):
         distances = []
         for i in range(self._iterations):
+            self._trig.value(0)
+            time.sleep_us(2)
             self._trig.value(1)
             time.sleep_us(10)
             self._trig.value(0)
