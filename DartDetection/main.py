@@ -58,8 +58,8 @@ mux = Mux(18, 5, 17, 16, 19)
 #Setting the trigger 
 trig = Pin(4, Pin.OUT) #was pin 15 
 
-Sound_SPEED = 34300 #cm/s
-TRIG_PULSE_DURATION_US = 10
+# Sound_SPEED = 34300 #cm/s
+# TRIG_PULSE_DURATION_US = 10
 
 # Create the sensors objects
 sensor0 = UltraSensor(13, 0, 19.8) # Pin 13 , location (0,20)
