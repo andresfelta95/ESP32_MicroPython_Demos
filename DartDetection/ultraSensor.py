@@ -52,13 +52,17 @@ class UltraSensor:
                 ultrason_duration = 0
             if ultrason_duration > 0:
                 #   cm = duration * speed of sound(cm/s) / 2 (round trip) / 10000 (us to s)
-                distances.append(Sound_SPEED * ultrason_duration /2 / 1000000)
-            time.sleep_ms(self._sleep)
+                distances.append(Sound_SPEED * ultrason_duration /2.0 / 1000000)
+            time.sleep_ms(10)
         #   Remove the outliers
-        distances.sort()
-        distances = distances[math.floor(self._perFail * self._iterations):math.ceil((1 - self._perFail) * self._iterations)]
+        while len(distances) >= 7:
+            #   Remove the lowest and highest values
+            distances.remove(min(distances))
+            distances.remove(max(distances))
+        print(distances)
+        cm = sum(distances) / len(distances)
         #   Return the average distance
-        return sum(distances) / len(distances)
+        return round(cm, 2)
     
     
         

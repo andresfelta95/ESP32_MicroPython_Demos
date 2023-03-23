@@ -107,10 +107,11 @@ player2_points = 0
 
 while True:
     #   Read the distance from each sensor
-    for sensor in sensors:
-        mux.set_channel(sensors.index(sensor))
-        distance = sensor.get_distance()
-        print("Sensor: ", sensors.index(sensor), " Distance: ", distance)
+    for i in range(len(sensors)):
+        sensor = sensors[i]
+        mux.set_channel(i)
+        distance = sensor.read_distance()
+        print("Sensor: ", i, " Distance: ", distance)
         time.sleep(1)
 
 def findingTheDart(dartList):
