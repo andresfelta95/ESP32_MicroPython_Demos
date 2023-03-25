@@ -61,8 +61,11 @@ class UltraSensor:
             distances.remove(max(distances))
         print(distances)
         cm = sum(distances) / len(distances)
+        cm = self.convert_Distance(cm)
         #   Return the average distance
         return round(cm, 2)
     
-    
+    def convert_Distance(self, distance):
+        actualDistance = 0.9248 * distance + 1.5536
+        return actualDistance
         
