@@ -47,12 +47,14 @@ class UltraSensor:
             time.sleep_us(10)
             self._trig.value(0)
             try:
+                #   Get the duration of the echo pulse
                 ultrason_duration = time_pulse_us(self._echo, 1, self._timeOut)
             except OSError:
                 ultrason_duration = 0
             if ultrason_duration > 0:
                 #   cm = duration * speed of sound(cm/s) / 2 (round trip) / 10000 (us to s)
-                distances.append(Sound_SPEED * ultrason_duration /2.0 / 1000000)
+                #distances.append(Sound_SPEED * ultrason_duration /2.0 / 1000000)
+                distances.append(ultrason_duration) #   In us
             time.sleep_ms(10)
         #   Remove the outliers
         while len(distances) >= 7:
@@ -61,7 +63,7 @@ class UltraSensor:
             distances.remove(max(distances))
         print(distances)
         cm = sum(distances) / len(distances)
-        cm = self.convert_Distance(cm)
+        #cm = self.convert_Distance(cm)
         #   Return the average distance
         return round(cm, 2)
     
