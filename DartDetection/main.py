@@ -62,16 +62,16 @@ trig = Pin(4, Pin.OUT) #was pin 15
 # TRIG_PULSE_DURATION_US = 10
 
 # Create the sensors objects
-sensor0 = UltraSensor(13, 0, 19.8) # Pin 13 , location (0,20)
-sensor1 = UltraSensor(12, 11.4, 16.2) # Pin 12 , location (11.4,16.2)
-sensor2 = UltraSensor(14, 18.8, 6) # Pin 14 , location (18.8,6)
-sensor3 = UltraSensor(27, 18.8, -6) # Pin 27 , location (18.8,-6)
-sensor4 = UltraSensor(26, 11.4, -16.2) # Pin 26 , location (11.4,-16.2)
-sensor5 = UltraSensor(25, 0, -19.8) # Pin 25 , location (0,-19.8)
-sensor6 = UltraSensor(33, -11.4, -16.2) # Pin 33 , location (-11.4,-16.2)
-sensor7 = UltraSensor(32, -18.8, -6) # Pin 32 , location (-18.8,-6)
-sensor8 = UltraSensor(35, -18.8, 6) # Pin 35 , location (-18.8,6)
-sensor9 = UltraSensor(34, -11.4, 16.2) # Pin 34 , location (-11.4,16.2)
+sensor0 = UltraSensor(13, 0, 19.8, 0.0161, 1.6172) # Pin 13 , location (0,19.8)
+sensor1 = UltraSensor(12, 11.4, 16.2, 0.0158, 1.7105) # Pin 12 , location (11.4,16.2)
+sensor2 = UltraSensor(14, 18.8, 6, 0.016, 1.9421) # Pin 14 , location (18.8,6)
+sensor3 = UltraSensor(27, 18.8, -6, 0.0158, 2.1619) # Pin 27 , location (18.8,-6)
+sensor4 = UltraSensor(26, 11.4, -16.2, 0.0153, 2.294) # Pin 26 , location (11.4,-16.2)
+sensor5 = UltraSensor(25, 0, -19.8, 0.0158, 1.1089) # Pin 25 , location (0,-19.8)
+sensor6 = UltraSensor(33, -11.4, -16.2, 0.0164, 1.1967) # Pin 33 , location (-11.4,-16.2)
+sensor7 = UltraSensor(32, -18.8, -6, 0.0152, 1.8608) # Pin 32 , location (-18.8,-6)
+sensor8 = UltraSensor(35, -18.8, 6, 0.0154, 1.9196) # Pin 35 , location (-18.8,6)
+sensor9 = UltraSensor(34, -11.4, 16.2, 0.0158, 1.7896) # Pin 34 , location (-11.4,16.2)
 
 # Create the list of sensors
 sensors = [sensor0, sensor1, sensor2, sensor3, sensor4, sensor5, sensor6, sensor7, sensor8, sensor9]
@@ -107,17 +107,17 @@ player2_points = 0
 
 while True:
     #   Read the distance from each sensor
-    # for i in range(len(sensors)):
-    #     sensor = sensors[i]
-    #     mux.set_channel(i)
-    #     distance = sensor.read_distance()
-    #     print("Sensor: ", i, " Distance: ", distance)
-    #     time.sleep(1)
-    sensor = sensors[0]
-    mux.set_channel(0)
-    distance = sensor.read_distance()
-    print("Sensor: ", 0, " Distance: ", distance)
-    time.sleep(1)
+    for i in range(len(sensors)):
+        sensor = sensors[i]
+        mux.set_channel(i)
+        distance = sensor.read_distance()
+        print("Sensor: ", i, " Distance: ", distance)
+        time.sleep(0.1)
+    # sensor = sensors[9]
+    # mux.set_channel(9)
+    # distance = sensor.read_distance()
+    # print("Sensor: ", 9, " Distance: ", distance)
+    # time.sleep(1)
 
 def findingTheDart(dartList):
     position = 0
@@ -125,3 +125,4 @@ def findingTheDart(dartList):
     #for dart_pos in dartList:
     
     return position
+

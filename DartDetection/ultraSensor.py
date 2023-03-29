@@ -23,13 +23,15 @@ Sound_SPEED = 34300 #cm/s
 class UltraSensor:
 
     #   Initialize the sensor
-    def __init__(self, echo, _x, _y):
+    def __init__(self, echo, _x, _y, _Mval, _Bval):
         #   Set the attributes
         self._echo = Pin(echo, Pin.IN)
         self._trig = Pin(4, Pin.OUT)
         self._trig.value(0)
         #   Set the location of the sensor as a tuple
         self._location = (_x, _y)
+        self._Mval = _Mval
+        self._Bval = _Bval
         self.distance = 0.0
         self._timeOut = 50000 #   Timeout in us for the echo pulse
         self._sleep = 0.1 #   Sleep time in s between readings
@@ -68,7 +70,20 @@ class UltraSensor:
         return round(cm, 2)
     
     def convert_Distance(self, distance):
-        actualDistance = 0.0161 * distance + 1.6172 # sensor 0
-        #actualDistance = 0.0158 * distance + 1.7105 # sensor 1
+        # actualDistance = 0.0161 * distance + 1.6172 # sensor 0
+        # actualDistance = 0.0158 * distance + 1.7105 # sensor 1
+        # actualDistance = 0.016 * distance + 1.9421 # sensor 2
+        # actualDistance = 0.0158 * distance + 2.1619 # sensor 3
+        # actualDistance = 0.0153 * distance + 2.294 # sensor 4
+        # actualDistance = 0.0158 * distance + 1.1089 # sensor 5
+        # actualDistance = 0.0164 * distance + 1.1967 # sensor 6
+        # actualDistance = 0.0152 * distance + 1.8608 # sensor 7
+        # actualDistance = 0.0154 * distance + 1.9196 # sensor 8
+        # actualDistance = 0.0157 * distance + 1.7885 # sensor 9
+        actualDistance = self._Mval * distance + self._Bval
         return actualDistance
+    
+#   Manager Class for the sensors
+# class UltraManager:
+
         
