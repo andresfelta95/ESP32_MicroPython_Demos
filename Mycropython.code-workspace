@@ -18,6 +18,10 @@
 		{
 			"name": "DartDetection",
 			"path": "DartDetection"
+		},
+		{
+			"name": "PointDetector",
+			"path": "../../PointDetector"
 		}
 	],
 	"settings": {}
