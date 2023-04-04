@@ -22,6 +22,10 @@
 		{
 			"name": "PointDetector",
 			"path": "../../PointDetector"
+		},
+		{
+			"name": "Esp8266",
+			"path": "Esp8266"
 		}
 	],
 	"settings": {}
